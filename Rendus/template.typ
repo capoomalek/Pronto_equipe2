@@ -10,7 +10,6 @@
   subtitle: "",
   authors: (),
   date: "",
-  promo: "",
   group: "",
   version: "",
   logo: none,
@@ -57,7 +56,7 @@
     // --- LE TEXTE (Aligné gauche) ---
     #place(top + left, dx: 2.5cm, dy: 9cm)[
       #set text(font: "Arial", size: 11pt, fill: black)
-      #set par(leading: 0.6em, justify: false, first-line-indent: 0pt)
+      #set par(leading: 0.6em, justify: false, first-line-indent: 0pt, hanging-indent: 0pt)
       
       // Date
       #date
@@ -71,7 +70,6 @@
       #grid(
         columns: (auto, auto),
         gutter: 3cm,
-        [Demi-Promo #promo],
         [Equipe #group]
       )
 
