@@ -1,5 +1,4 @@
 #import "template.typ": project
-#set text(font: "CMU Serif")
 
 
 #show: project.with(

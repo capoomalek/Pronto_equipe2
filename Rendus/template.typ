@@ -18,7 +18,7 @@
 ) = {
   
   // Configuration globale
-  set text(font: "New Computer Modern", size: 12pt, lang: "fr")
+  set text(font: "New Computer Modern", size: 11pt, lang: "fr")
   set par(justify: true, leading: 0.65em, first-line-indent: 1.5em)
   set heading(numbering: "I.1.")
 
