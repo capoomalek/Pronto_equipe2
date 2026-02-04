@@ -1,5 +1,4 @@
 #import "template.typ": project
-#set text(font: "CMU Serif")
 
 
 #show: project.with(
@@ -8,5 +7,11 @@
   authors: ("Adrien Constant", "Oscar Escarmant", "Malek Ghribi", "Thomas Gusse", "Quentin Le Prince"),
   date: "03 mars 2026",
   group: "2",          // Mettez votre numéro de groupe,
-  logo: "imta_logo.pdf"
+  logo: "imta_logo.pdf",
+  encadrant: "Amanda Porta"
 )
+
+#pagebreak()
+
+test test test
+

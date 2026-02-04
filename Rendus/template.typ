@@ -26,12 +26,17 @@
   page(margin: 0cm)[
     
     // A. FORMES GÉOMÉTRIQUES (Coin haut droit)
-    #let u = 2.5cm 
-    #place(top + right, dx: 0cm, dy: 0cm)[
-      #box(width: 15cm, height: 15cm)[
-        #place(top + right, dx: -1cm, dy: 1cm)[
+    #let u = 2.2cm 
+    
+    #place(top + right, dx: -0.5cm, dy: 0.5cm)[
+      // On réduit aussi la boite conteneur (ex: 11cm au lieu de 15cm) pour ne pas gêner le texte
+      #box(width: 11cm, height: 11cm)[
+        #place(top + right, dx: -0.5cm, dy: 0.5cm)[ // On rapproche un peu du bord (dx/dy réduits)
+           // 1. Triangle Vert
            #place(top + right, polygon(fill: imt-green, (0pt, 0pt), (-3 * u, 0pt), (0pt, 3 * u)))
+           // 2. Triangle Bleu Clair
            #place(top + right, dx: 0cm, dy: 3 * u, polygon(fill: imt-light-blue, (0pt, 0pt), (-2.24 * u, 0pt), (0pt, 2.24 * u)))
+           // 3. Triangle Bleu Foncé
            #place(top + right, dx: 0cm, dy: 0cm, polygon(fill: imt-dark-blue, (-5.24 * u, 0pt), (-2.24 * u, 3 * u), (-5.24 * u, 3 * u)))
         ]
       ]
