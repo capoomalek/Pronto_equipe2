@@ -11,7 +11,7 @@
   group: "Nantes", // Le campus (utilisé dans le bloc haut gauche)
   version: "1.1",
   encadrant: "Prénom Nom",
-  logo: true, // Metter true si le fichier "imta_logo.pdf" est présent
+  logo: true, // Mettre true si le fichier "imta_logo.pdf" est présent
 )
 #pagebreak()
 
