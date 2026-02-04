@@ -83,7 +83,7 @@
       // 5. Encadrant (Décalé vers la droite comme sur l'image)
       #align(right)[
         Encadré par : #box(fill: silver.lighten(60%), inset: (x: 3pt, y: 0pt), outset: (y: 3pt), radius: 2pt)[#encadrant]
-        #h(2cm) // Petite marge à droite pour ne pas coller au bord
+        #h(-3cm) // Petite marge à droite pour ne pas coller au bord
       ]
     ]
 
