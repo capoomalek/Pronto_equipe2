@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>PRONTO - Méthodes d'Imagerie 3D</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 1000px; margin: auto; padding: 20px; background-color: #f4f7f6; }
+        .method-card { background: white; border-radius: 10px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-left: 8px solid #004a99; }
+        h2 { color: #004a99; margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
+        .tech-desc { background: #f0f4f8; padding: 15px; border-radius: 5px; margin-top: 10px; }
+        .creation-process { border-top: 1px solid #ddd; margin-top: 15px; padding-top: 10px; font-size: 0.95em; }
+        img { width: 100%; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .tag { display: inline-block; padding: 3px 8px; border-radius: 3px; font-weight: bold; font-size: 0.8em; margin-bottom: 10px; text-transform: uppercase; }
+        .actif { background: #d1ecf1; color: #0c5460; }
+        .passif { background: #d4edda; color: #155724; }
+        .contact { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+
+    <header style="text-align:center; margin-bottom:40px;">
+        <h1>Panorama des Solutions d'Imagerie 3D</h1>
+        <p>Projet PRONTO</p>
+    </header>
+
+    <div class="method-card">
+        <span class="tag contact">Scanner avec contact</span>
+        <h2>1. Palpage Mécanique</h2>
+        <div class="grid">
+            <div>
+                <p><strong>Principe :</strong> Une sonde physique (palpeur) vient toucher la surface de l'objet.</p>
+                <div class="creation-process">
+                    <strong>Comment l'image 3D est créée :</strong>
+                    Le système enregistre les coordonnées articulaires du bras au moment du contact. Chaque point touché génère une coordonnée cartésienne (X, Y, Z). L'accumulation de ces points forme un nuage de points précis représentant la géométrie de la pièce.
+                </div>
+            </div>
+            <div>
+                <img src="assets/palpeur.png" alt="Scanner avec contact">
+            </div>
+        </div>
+    </div>
+
+    <div class="method-card">
+        <span class="tag actif">Scanner sans contact actif</span>
+        <h2>2. Triangulation par Plan Laser</h2>
+        <div class="grid">
+            <div>
+                <p><strong>Principe :</strong> Projection d'une ligne lumineuse dont on observe la déviation.</p>
+                <div class="creation-process">
+                    <strong>Comment l'image 3D est créée :</strong>
+                    La ligne laser se déforme en suivant le relief. La caméra capte cette déformation. Connaissant la distance entre le laser et la caméra, ainsi que leurs angles respectifs, le logiciel résout un triangle trigonométrique pour chaque pixel de la ligne, calculant ainsi la profondeur Z.
+                </div>
+            </div>
+            <div>
+                <img src="assets/laser.png" alt="Triangulation laser">
+            </div>
+        </div>
+    </div>
+
+    <div class="method-card">
+        <span class="tag actif">Scanner sans contact actif</span>
+        <h2>3. Temps de Vol (LiDAR)</h2>
+        <div class="grid">
+            <div>
+                <p><strong>Principe :</strong> Mesure du temps de trajet de la lumière.</p>
+                <div class="creation-process">
+                    <strong>Comment l'image 3D est créée :</strong>
+                    Le scanner émet une impulsion laser. En mesurant le temps t entre l'émission et la réception du signal réfléchi, et connaissant la vitesse de la lumière c, on calcule la distance d = (c \cdot t) / 2. Un système de miroirs rotatifs balaie l'espace pour créer une cartographie complète.
+                </div>
+            </div>
+            <div>
+                <img src="assets/vol.png" alt="Scanner Temps de Vol">
+            </div>
+        </div>
+    </div>
+
+    <div class="method-card" style="border-left-color: #e67e22;">
+        <span class="tag actif" style="background:#fdebd0; color:#e67e22;">Projet PRONTO - Lumière Structurée</span>
+        <h2>4. Imagerie par Codage Binaire</h2>
+        <div class="grid">
+            <div>
+                <p><strong>Principe :</strong> Projection d'une séquence temporelle de motifs de franges.</p>
+                <div class="creation-process">
+                    <strong>Comment l'image 3D est créée :</strong>
+                    <ol>
+                        <li>On projette N images où les franges doublent de fréquence.</li>
+                        <li>Chaque pixel "lit" une séquence (ex: Brillant-Sombre-Brillant) qui devient un code binaire (101).</li>
+                        <li>Ce code identifie de quel **plan projecteur** provient la lumière.</li>
+                        <li>La 3D naît de l'intersection géométrique entre le rayon de la caméra et ce plan de lumière spécifique.</li>
+                    </ol>
+                </div>
+            </div>
+            <div>
+                <img src="assets/binaire.png" alt="Principe du codage binaire">
+            </div>
+        </div>
+    </div>
+
+    <div class="method-card">
+        <span class="tag passif">Scanner sans contact passif</span>
+        <h2>5. Stéréoscopie (Vision binoculaire)</h2>
+        <div class="grid">
+            <div>
+                <p><strong>Principe :</strong> Utilisation de deux points de vue différents (comme les yeux humains).</p>
+                <div class="creation-process">
+                    <strong>Comment l'image 3D est créée :</strong>
+                    Deux caméras capturent deux images simultanées. Le logiciel cherche les points communs entre les deux vues. Le décalage de position (disparité) d'un objet entre les deux images permet de calculer sa distance : plus l'objet est proche, plus son décalage est grand.
+                </div>
+            </div>
+            <div>
+                <img src="assets/Stéréo.png" alt="Principe de la stéréoscopie">
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

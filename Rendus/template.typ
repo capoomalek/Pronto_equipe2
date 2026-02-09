@@ -106,7 +106,7 @@
         gutter: 10pt,
         align(bottom + left, strong(title)),
         align(bottom + right, 
-          block(width: 80%, align(right, authors.join(", ")))
+          block(width: 90%, align(right, authors.join(", ")))
         )
 )
         v(-4pt)
