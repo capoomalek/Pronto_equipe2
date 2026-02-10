@@ -32,7 +32,85 @@ test test test
 == Contexte d'utilisation du système
 == Expression fonctionnelle du besoin
 === Fonctions de service et de contrainte
+==== Codes fournis
+#table(
+  columns: 2,
+  [*Fonction*], [franges_objet.py],
+  [Objectif], [],
+  [Description], [],
+  [Contrainte], []
+)
+
+#table(
+  columns: 2,
+  [*Fonction*], [_franges_recepteur.py_],
+  [Objectif], [],
+  [Description], [],
+  [Contrainte], []
+)
+#table(
+  columns: 2,
+  [*Fonction*], [_Objet.py_],
+  [Objectif], [],
+  [Description], [],
+  [Contrainte], []
+)
+#table(
+  columns: 2,
+  [*Fonction*], [_Trames_binaires.py_],
+  [Objectif], [],
+  [Description], [],
+  [Contrainte], []
+)
+#table(
+  columns: 2,
+  [*Fonction*], [_Local_cotes_franges.py_],
+  [Objectif], [],
+  [Description], [],
+  [Contrainte], []
+)
+#table(
+  columns: 2,
+  [*Fonction*], [_Local_frange.py_],
+  [Objectif], [],
+  [Description], [],
+  [Contrainte], []
+)
+#table(
+  columns: 2,
+  [*Fonction*], [_Damier_emet_recept.py_],
+  [Objectif], [],
+  [Description], [],
+  [Contrainte], []
+)
+
+#table(
+  columns: 2,
+  [*Fonction*], [_Damier_recept.py_],
+  [Objectif], [],
+  [Description], [],
+  [Contrainte], []
+)
+
+#table(
+  columns: 2,
+  [*Fonction*], [_Mire_Damier_],
+  [Objectif], [],
+  [Description], [],
+  [Contrainte], []
+)
+
+==== Codes réalisés par l'équipe
+#table(
+  columns: 2,
+  [*Fonction*], [_Toiture.py_],
+  [Objectif], [],
+  [Description], [],
+  [Contrainte], []
+)
+
 === Scénarios
 == Validation du besoin
 = Le plan de travail
 = Organisation
+
