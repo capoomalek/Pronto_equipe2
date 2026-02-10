@@ -29,6 +29,8 @@ a = 300
 Za2 = R**2 - X**2 - Y**2
 Z = sqrt((Za2>a**2)*Za2) - a + a*(Za2<=a**2)
 
+P4 = X >= -300 and Y-X+100 >= 0 and Y+X+100 <= 0
+
 if P1:
     Z = 
 
@@ -38,8 +40,8 @@ if P2:
 if P2:
     Z = 
 
-if P2:
-    Z = 
+if P4:
+    Z = 225*(1 + X/300)/2
 
 #Enregistrement des coordonnées matricelles objet
 savetxt('X_toiture.txt', X, fmt='%-7.6f')   
