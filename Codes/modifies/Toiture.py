@@ -24,9 +24,23 @@ a = 300
 #Coordonnées matricielles des pts M de l'objet
 [X,Y] = meshgrid(linspace(-600,600,NbHO),linspace(-375,375,NbVO))
 
+
 #Affixe de l'objet (mm)
 Za2 = R**2 - X**2 - Y**2
 Z = sqrt((Za2>a**2)*Za2) - a + a*(Za2<=a**2)
+
+if P1:
+    Z = 
+
+if P2:
+    Z = 
+
+if P2:
+    Z = 
+
+if P2:
+    Z = 
+
 #Enregistrement des coordonnées matricelles objet
 savetxt('X_toiture.txt', X, fmt='%-7.6f')   
 savetxt('Y_toiture.txt', Y, fmt='%-7.6f')
