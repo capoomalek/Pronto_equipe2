@@ -3,11 +3,6 @@
 __pycache__/
 *.pyc
 
-# Ignore les environnements virtuels (si vous en avez)
-env/
-venv/
-.env
-
 # --- Fichiers générés par vos codes ---
 # Adapte selon ce que votre code crache
 *.bmp
