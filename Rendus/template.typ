@@ -18,7 +18,7 @@
 ) = {
   
   // Configuration globale
-  set text(font: "New Computer Modern", size: 11pt, lang: "fr")
+  set text(font: "New Computer Modern", size: 12pt, lang: "fr")
   set par(justify: true, leading: 0.65em, first-line-indent: 1.5em)
   set heading(numbering: "I.1.")
 
@@ -102,16 +102,11 @@
       if counter(page).get().first() > 1 {
         set text(size: 9pt, fill: imt-gray)
         grid(
-        columns: (1fr, 1.5fr), // On ajuste les proportions
-        gutter: 10pt,
-        align(bottom + left, strong(title)),
-        
-        // Bloc des noms avec alignement interne à droite
-        align(bottom + right, 
-          block(width: 80%, align(right, authors.join(", ")))
+          columns: (1fr, 1fr),
+          align(left, title),
+          align(right, authors.join(", "))
         )
-)
-        v(-4pt) // Ajustement fin de l'espace avant la ligne
+        v(-8pt)
         line(length: 100%, stroke: 0.5pt + imt-gray)
       }
     },
