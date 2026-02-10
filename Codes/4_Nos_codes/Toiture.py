@@ -18,7 +18,7 @@ NbHO = 1280
 NbVO = 800
 
 #Coordonnées matricielles des pts M de l'objet
-[X,Y] = meshgrid(linspace(-600,600,NbHO),linspace(-300,300,NbVO))
+[X,Y] = meshgrid(linspace(-600,600,NbHO),linspace(-400,400,NbVO))
 
 Z = 0*X
 
