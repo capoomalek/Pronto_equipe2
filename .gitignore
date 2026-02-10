@@ -1,0 +1,20 @@
+# --- Python ---
+# Ignore les dossiers de compilation automatique
+__pycache__/
+*.pyc
+
+# Ignore les environnements virtuels (si vous en avez)
+env/
+venv/
+.env
+
+# --- Fichiers générés par vos codes ---
+# Adapte selon ce que votre code crache
+*.bmp
+*.txt
+output/
+data/
+
+# --- Typst ---
+# On garde le code source (.typ) mais on ignore le PDF généré
+*.pdf
