@@ -33,12 +33,6 @@ Z = sqrt((Za2>a**2)*Za2) - a + a*(Za2<=a**2)
 
 P1= Y<200 and Y>0 and X>-Y-100 and X<Y+100
 
-<<<<<<< HEAD
-=======
-if P1:
-    Z =75-75*Y/200
-
->>>>>>> f03769c6aabefaeb6dd3cd5728d6fc33800f14ee
 P2 = ((Y<X-100) and (Y>-X+100) and (X<300))
 
 P3 = Y <= 0 and Y >= -200 and Y <= -X + 100 and Y <= X + 100
