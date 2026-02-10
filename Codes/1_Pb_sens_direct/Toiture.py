@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 
 #************************************************************************
-#*********** Création de l'objet bouclier dans repère Objet (O,X,Y,Z) ***
+#*********** Création de l'objet toiture dans repère Objet (O,X,Y,Z) ***
 #************************************************************************
 #Nb pixel Objet (échantillonnage objet)
 NbHO = 1280
