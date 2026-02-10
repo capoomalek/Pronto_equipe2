@@ -13,5 +13,28 @@
 
 #pagebreak()
 
-test test test
+#outline()
 
+#pagebreak()
+
+#table(
+  columns: 2,
+  [*Fonction*], [_Nom de la fonction_],
+  [Objectif], [],
+  [Description], [],
+  [Contrainte], []
+)
+= Présentation du Projet
+
+== Finalité, mission, objectifs
+
+== Liste des parties prenantes
+
+= Cahier des charges fonctionnel
+== Contexte d'utilisation du système
+== Expression fonctionnelle du besoin
+=== Fonctions de service et de contrainte
+=== Scénarios
+== Validation du besoin
+= Le plan de travail
+= Organisation
