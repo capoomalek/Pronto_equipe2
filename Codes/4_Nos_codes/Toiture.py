@@ -30,9 +30,10 @@ Za2 = R**2 - X**2 - Y**2
 Z = sqrt((Za2>a**2)*Za2) - a + a*(Za2<=a**2)
 
 P4 = X >= -300 and Y-X+100 >= 0 and Y+X+100 <= 0
+P1= Y<200 and Y>0 and X>-Y-100 and X<Y+100
 
 if P1:
-    Z = 
+    Z =75+-75*Y/200
 
 if P2:
     Z = 
