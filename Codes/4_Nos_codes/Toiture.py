@@ -35,9 +35,9 @@ P1= Y<200 and Y>0 and X>-Y-100 and X<Y+100
 if P1:
     Z =75+-75*Y/200
 
+P2 = ((Y<X-100) and (Y>-X+100) and (X<300))
 if P2:
-    Z = 
-
+    Z = (225/2)*(1 - X/300)
 if P2:
     Z = 
 
