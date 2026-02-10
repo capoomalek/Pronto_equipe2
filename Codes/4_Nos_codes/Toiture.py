@@ -22,7 +22,7 @@ R = 360
 a = 300
 
 #Coordonnées matricielles des pts M de l'objet
-[X,Y] = meshgrid(linspace(-300,300,NbHO),linspace(-200,200,NbVO))
+[X,Y] = meshgrid(linspace(-600,600,NbHO),linspace(-375,375,NbVO))
 
 
 #Affixe de l'objet (mm)
