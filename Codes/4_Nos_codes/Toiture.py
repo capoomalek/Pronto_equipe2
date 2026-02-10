@@ -16,48 +16,34 @@ import matplotlib.pyplot as plt
 #Nb pixel Objet (échantillonnage objet)
 NbHO = 1280
 NbVO = 800
-#Rayon sphere mm
-R = 360
-#Recul sphere mm
-a = 300
 
 #Coordonnées matricielles des pts M de l'objet
-[X,Y] = meshgrid(linspace(-300,300,NbHO),linspace(-200,200,NbVO))
+[X,Y] = meshgrid(linspace(-600,600,NbHO),linspace(-300,300,NbVO))
+
+Z = 0*X
 
 
-#Affixe de l'objet (mm)
-Za2 = R**2 - X**2 - Y**2
-Z = sqrt((Za2>a**2)*Za2) - a + a*(Za2<=a**2)
+P1 = (Y >= 0) & (Y <= 200) & (X >= -Y - 100) & (X <= Y + 100)
 
+P2 = (Y<X-100) & (Y>-X+100) & (X<300)
 
+P3 = (Y <= 0) & (Y >= -200) & (Y <= -X + 100) & (Y <= X + 100)
 
-P1= Y<200 and Y>0 and X>-Y-100 and X<Y+100
-
-<<<<<<< HEAD
-=======
-if P1:
-    Z =75-75*Y/200
-
->>>>>>> f03769c6aabefaeb6dd3cd5728d6fc33800f14ee
-P2 = ((Y<X-100) and (Y>-X+100) and (X<300))
-
-P3 = Y <= 0 and Y >= -200 and Y <= -X + 100 and Y <= X + 100
-
-P4 = X >= -300 and Y-X+100 >= 0 and Y+X+100 <= 0
+P4 = (X >= -300) & (Y-X-100 >= 0) & (Y+X+100 <= 0)
 
 
 
-if P1:
-    Z =75-75*Y/200
+Z1 = 75 - 75*Y/200
+Z[P1] = Z1[P1]
 
-if P2:
-    Z = (225/2)*(1 - X/300)
+Z2 = (225/2)*(1 - X/300)
+Z[P2] = Z2[P2]
 
-if P3:
-    Z = 75/200*Y + 75
+Z3 = 75/200*Y + 75
+Z[P3] = Z3[P3]
 
-if P4:
-    Z = 225*(1 + X/300)/2
+Z4 = 225*(1 + X/300)/2
+Z[P4] = Z4[P4]
 
 
     
