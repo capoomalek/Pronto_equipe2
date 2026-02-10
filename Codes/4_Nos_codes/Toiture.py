@@ -22,15 +22,17 @@ R = 360
 a = 300
 
 #Coordonnées matricielles des pts M de l'objet
-[X,Y] = meshgrid(linspace(-600,600,NbHO),linspace(-375,375,NbVO))
+[X,Y] = meshgrid(linspace(-300,300,NbHO),linspace(-200,200,NbVO))
 
 
 #Affixe de l'objet (mm)
 Za2 = R**2 - X**2 - Y**2
 Z = sqrt((Za2>a**2)*Za2) - a + a*(Za2<=a**2)
 
+P1= Y<200 and Y>0 and X>-Y-100 and X<Y+100
+
 if P1:
-    Z = 
+    Z =75+-75*Y/200
 
 P2 = ((Y<X-100) and (Y>-X+100) and (X<300))
 if P2:
