@@ -32,7 +32,7 @@ Z = sqrt((Za2>a**2)*Za2) - a + a*(Za2<=a**2)
 P1= Y<200 and Y>0 and X>-Y-100 and X<Y+100
 
 if P1:
-    Z =75+-75*Y/200
+    Z =75-75*Y/200
 
 if P2:
     Z = 
