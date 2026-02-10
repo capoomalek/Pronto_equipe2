@@ -15,3 +15,10 @@
 
 test test test
 
+#table(
+  columns: 2,
+  [*Fonction*], [_Nom de la fonction_],
+  [Objectif], [],
+  [Description], [],
+  [Contrainte], []
+)
