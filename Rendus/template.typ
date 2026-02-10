@@ -83,7 +83,7 @@
       // 5. Encadrant (Décalé vers la droite comme sur l'image)
       #align(right)[
         Encadré par : #box(fill: silver.lighten(60%), inset: (x: 3pt, y: 0pt), outset: (y: 3pt), radius: 2pt)[#encadrant]
-        #h(2cm) // Petite marge à droite pour ne pas coller au bord
+        #h(-3cm) // Petite marge à droite pour ne pas coller au bord
       ]
     ]
 
@@ -102,11 +102,14 @@
       if counter(page).get().first() > 1 {
         set text(size: 9pt, fill: imt-gray)
         grid(
-          columns: (1fr, 1fr),
-          align(left, title),
-          align(right, authors.join(", "))
+        columns: (1fr, 1.5fr),
+        gutter: 10pt,
+        align(bottom + left, strong(title)),
+        align(bottom + right, 
+          block(width: 90%, align(right, authors.join(", ")))
         )
-        v(-8pt)
+)
+        v(-4pt)
         line(length: 100%, stroke: 0.5pt + imt-gray)
       }
     },

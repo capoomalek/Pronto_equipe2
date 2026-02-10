@@ -4,11 +4,15 @@
 #show: project.with(
   title: "Cahier des charges fonctionnel",
   subtitle: "Situation d'apprentissage Physique",
-  authors: ("Adrien Constant", "Oscar Escarmant", "Malek Ghribi", "Thomas Gusse", "Quentin Le Prince"),
+  authors: ("Adrien CONSTANT", "Oscar ESCARMANT", "Malek GHRIBI", "
+            Thomas GUSSE", "Quentin LE PRINCE"),
   date: "03 mars 2026",
-  group: "2",          // Mettez votre numéro de groupe,
+  group: "Nantes",          // Mettez votre numéro de groupe,
   logo: "imta_logo.pdf",
-  encadrant: "Amanda Porta"
+  encadrant: "Amanda PORTA"
 )
 
 #pagebreak()
+
+test test test
+
