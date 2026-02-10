@@ -22,14 +22,12 @@ R = 360
 a = 300
 
 #Coordonnées matricielles des pts M de l'objet
-[X1,Y1] = meshgrid(linspace(-600,600,NbHO),linspace(-375,375,NbVO))
-[X2,Y2] = meshgrid(linspace(-600,600,NbHO),linspace(-375,375,NbVO))
-[X3,Y3] = meshgrid(linspace(-600,600,NbHO),linspace(-375,375,NbVO))
-[X4,Y4] = meshgrid(linspace(-600,600,NbHO),linspace(-375,375,NbVO))
+[X,Y] = meshgrid(linspace(-600,600,NbHO),linspace(-375,375,NbVO))
+
 
 #Affixe de l'objet (mm)
 Za2 = R**2 - X**2 - Y**2
-Z = sqrt((Za2>a**2)*Za2) - a + a*(Za2<=a**2)
+Z1 = sqrt((Za2>a**2)*Za2) - a + a*(Za2<=a**2)
 #Enregistrement des coordonnées matricelles objet
 savetxt('X.txt', X, fmt='%-7.6f')   
 savetxt('Y.txt', Y, fmt='%-7.6f')
