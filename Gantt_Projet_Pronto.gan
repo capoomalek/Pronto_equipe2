@@ -1,14 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Gantt de l'avancée du projet d'imageur 3D" company="Projet PRONTO Groupe 1 - Équipe 2" webLink="http://" view-date="2026-01-05" view-index="0" gantt-divider-location="351" resource-divider-location="300" version="3.3.3322" locale="fr_FR">
+<?xml version="1.0" encoding="UTF-8"?><project name="Gantt de l'avancée du projet d'imageur 3D" company="Projet PRONTO Groupe 1 - Équipe 2" webLink="http://" view-date="2026-01-01" view-index="0" gantt-divider-location="492" resource-divider-location="300" version="3.3.3322" locale="fr_FR">
     <description/>
-    <view zooming-state="default:2" id="gantt-chart">
-        <field id="tpd15" name="Notes" width="20" order="-1"/>
-        <field id="tpd3" name="Nom" width="200" order="0"/>
-        <field id="tpd4" name="Date de début" width="75" order="1"/>
-        <field id="tpd5" name="Date de fin" width="75" order="2"/>
+    <view zooming-state="default:8" id="gantt-chart">
+        <field id="tpd3" name="Nom" width="281" order="0"/>
+        <field id="tpd4" name="Date de début" width="105" order="1"/>
+        <field id="tpd5" name="Date de fin" width="105" order="2"/>
+        <field id="tpd15" name="Notes" width="20" order="3"/>
         <option id="filter.completedTasks" value="false"/>
         <option id="filter.dueTodayTasks" value="false"/>
         <option id="filter.overdueTasks" value="false"/>
         <option id="filter.inProgressTodayTasks" value="false"/>
+        <option id="color.recent"><![CDATA[#6666ff #ffffff #ffcc33 #990099 #ffccff #000000 #f4f4f4 #0099ff]]></option>
     </view>
     <view id="resource-table">
         <field id="0" name="Nom" width="210" order="0"/>
@@ -20,7 +21,7 @@
             <day-type id="0"/>
             <day-type id="1"/>
             <default-week id="1" name="default" sun="1" mon="0" tue="0" wed="0" thu="0" fri="0" sat="1"/>
-            <only-show-weekends value="false"/>
+            <only-show-weekends value="true"/>
             <overriden-day-types/>
             <days/>
         </day-types>
@@ -88,6 +89,50 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
+        <task id="7" uid="0eca60ba747b49d2a070a9e3857707ae" name="Cadrage" color="#000000" meeting="false" start="2026-02-02" duration="28" complete="0" expand="true">
+            <depend id="8" type="2" difference="0" hardness="Strong"/>
+            <task id="6" uid="9c695878077f4fa9ab690e5c0ee22306" name="Découverte de l'équipe et réflexion sur MINUTO" color="#ffccff" meeting="false" start="2026-02-02" duration="2" complete="0" expand="true"/>
+            <task id="1" uid="b73358274e1548c795c9854d84b3f847" name="Découverte du projet et de la documentation" color="#8cb6ce" meeting="false" start="2026-02-04" duration="7" complete="0" expand="true">
+                <depend id="3" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="2" uid="7f8eeb4ed0dc4a9b9e5de5b9dd30ca61" name="Recherche des différentes méthodes d'imagerie 3D" meeting="false" start="2026-02-05" duration="6" complete="0" priority="0" expand="true"/>
+            <task id="3" uid="794741c7ad9341f4a0c45ee45d486b42" name="Calcul et modélisation en 3D d'un toit" color="#ffcc33" meeting="false" start="2026-02-11" duration="1" complete="0" expand="true"/>
+            <task id="4" uid="a6a5e84ee99f4759ac88eb701251aec9" name="Rédaction du cahier des charges fonctionnelles" color="#ffffff" meeting="false" start="2026-02-04" duration="26" complete="0" priority="2" expand="true"/>
+        </task>
+        <task id="8" uid="2c6666faa81546d9bac4ed4e3674a98e" name="Production" meeting="false" start="2026-03-03" duration="50" complete="0" expand="true">
+            <depend id="14" type="2" difference="0" hardness="Strong"/>
+            <task id="10" uid="732ebcd6aeb54da296625af89345e3aa" name="Mise en place des codes" color="#990099" meeting="false" start="2026-03-04" duration="34" complete="0" expand="true">
+                <depend id="9" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="9" uid="dc6524663b494bb0a54176e5c4f8b397" name="Revue de projet" color="#ffccff" meeting="false" start="2026-04-08" duration="1" complete="0" expand="true"/>
+            <task id="5" uid="778342ad505845e3bbb313e34819dadf" name="Mise en place du protocole de calibrration" color="#6666ff" meeting="false" start="2026-03-03" duration="20" complete="0" expand="true">
+                <notes><![CDATA[Mettre en place de manière commune le protocole de calibration que nous devrons mettre en place à chaque utilisation.
+]]></notes>
+                <depend id="15" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="15" uid="2373c64761c24478b6cc60082810e9dc" name="Calbiration pour le premier objet" color="#ffcc33" meeting="false" start="2026-03-23" duration="5" complete="0" expand="true">
+                <depend id="16" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="16" uid="c9a2623b3fd1442bb4c16713afb18a7e" name="Modélisation du premier objet" color="#ffcc33" meeting="false" start="2026-03-28" duration="7" complete="0" expand="true">
+                <depend id="23" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="23" uid="d72230553bef4ace8b0a3d2ca11b6092" name="Revue de l'expérience et changement si nécessaire" color="#6666ff" meeting="false" start="2026-04-04" duration="4" complete="0" expand="true">
+                <depend id="17" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="17" uid="39a565217ad3483097ec6ea0579da651" name="Calibration pour le deuxième objet" color="#ffcc33" meeting="false" start="2026-04-09" duration="7" complete="0" expand="true">
+                <depend id="18" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="18" uid="4c53201db03b42d5a9da0dd2a91b9682" name="Modélisation du deuxième objet" color="#ffcc33" meeting="false" start="2026-04-16" duration="7" complete="0" expand="true"/>
+        </task>
+        <task id="14" uid="eb250c5b3cb5495f93b8eba82976e048" name="Valorisation" meeting="false" start="2026-04-24" duration="36" complete="0" expand="true">
+            <task id="19" uid="89a88bc9f9cc46029fbd0c64e5ae2ccb" name="Rédaction du rapport final" color="#ffffff" meeting="false" start="2026-04-24" duration="25" complete="0" expand="true">
+                <depend id="20" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="20" uid="e03e13da5ae94f90907bdf01ed0db3e0" name="Préparation de la soutenance" color="#ffffff" meeting="false" start="2026-05-22" duration="6" complete="0" expand="true">
+                <depend id="21" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="21" uid="24baef25075d4ab785afc9b245a0b826" name="Oral flash" color="#ffffff" meeting="false" start="2026-05-29" duration="5" complete="0" expand="true"/>
+        </task>
     </tasks>
     <resources/>
     <allocations/>
