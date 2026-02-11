@@ -54,19 +54,20 @@ for k in range(N):
     # # Affichage
     # #Décommenter pour afficher les figures Trames (pcolor augmente le temps d'execution du prgm)
     # z_min, z_max = 0, abs(IE).max()
-    # plt.figure(k);
+    # plt.figure(k)
     # plt.pcolor(vE,uE,IE, cmap='gray', vmin=z_min, vmax=z_max)
     # plt.title('Trame IE(m)')
     # plt.xlabel('vE pixels')
     # plt.ylabel('uE pixels')
     # # set the limits of the plot to the limits of the data
     # plt.axis([vE.min(), vE.max(), uE.min(), uE.max()])
-    
+
     # plt.figure(k)
     # io.imshow(B)
     # plt.title('Trame IE(m)')
     # plt.xlabel('vE pixels')
     # plt.ylabel('uE pixels')
+    # plt.show()
     
 
 print(time.process_time() - start_time, "seconds")  # fin mesure temps d'éxecusion
