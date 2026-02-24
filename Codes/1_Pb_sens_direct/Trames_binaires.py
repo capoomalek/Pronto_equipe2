@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from skimage import io    
 
 # Définition du nombre de trames
-N = 5
+N = 7
 f = open('N.txt', 'w')
 f.write('%d' % N)
 f.close()
@@ -52,22 +52,22 @@ for k in range(N):
     A = 'Trame' + str(k+1) + '.bmp'
     io.imsave(A,B)    
     # # Affichage
-    # #Décommenter pour afficher les figures Trames (pcolor augmente le temps d'execution du prgm)
-    # z_min, z_max = 0, abs(IE).max()
-    # plt.figure(k)
-    # plt.pcolor(vE,uE,IE, cmap='gray', vmin=z_min, vmax=z_max)
-    # plt.title('Trame IE(m)')
-    # plt.xlabel('vE pixels')
-    # plt.ylabel('uE pixels')
+    #Décommenter pour afficher les figures Trames (pcolor augmente le temps d'execution du prgm)
+    z_min, z_max = 0, abs(IE).max()
+    plt.figure(k)
+    plt.pcolor(vE,uE,IE, cmap='gray', vmin=z_min, vmax=z_max)
+    plt.title('Trame IE(m)')
+    plt.xlabel('vE pixels')
+    plt.ylabel('uE pixels')
     # # set the limits of the plot to the limits of the data
-    # plt.axis([vE.min(), vE.max(), uE.min(), uE.max()])
+    plt.axis([vE.min(), vE.max(), uE.min(), uE.max()])
 
-    # plt.figure(k)
-    # io.imshow(B)
-    # plt.title('Trame IE(m)')
-    # plt.xlabel('vE pixels')
-    # plt.ylabel('uE pixels')
-    # plt.show()
+    plt.figure(k)
+    io.imshow(B)
+    plt.title('Trame IE(m)')
+    plt.xlabel('vE pixels')
+    plt.ylabel('uE pixels')
+
     
 
 print(time.process_time() - start_time, "seconds")  # fin mesure temps d'éxecusion
