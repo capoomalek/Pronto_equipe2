@@ -29,7 +29,7 @@ NbVRzoom = len(uRzoomvect)
 NbHRzoom = len(vRzoomvect)
 
 #Numéro base décimale de la frange à localiser
-C = 12
+C = 50
 #Numéro base binaire de la frange à localiser
 Cbin = np.binary_repr(C, N)
 

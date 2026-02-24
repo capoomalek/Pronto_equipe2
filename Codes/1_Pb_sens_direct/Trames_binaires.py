@@ -49,9 +49,13 @@ for k in range(N):
     B = np.dstack((r,g,b))
     B = uint8(B)
     #enregistrement
-    A = 'Trame' + str(k+1) + '.bmp'
+    A = 'Trame' + str(k+1) + '.jpg'
     io.imsave(A,B)    
+<<<<<<< HEAD
     # # Affichage
+=======
+    # Affichage
+>>>>>>> 358f9d3f5613cfe631527836086c8872b315892e
     #Décommenter pour afficher les figures Trames (pcolor augmente le temps d'execution du prgm)
     z_min, z_max = 0, abs(IE).max()
     plt.figure(k)
@@ -59,6 +63,7 @@ for k in range(N):
     plt.title('Trame IE(m)')
     plt.xlabel('vE pixels')
     plt.ylabel('uE pixels')
+<<<<<<< HEAD
     # # set the limits of the plot to the limits of the data
     plt.axis([vE.min(), vE.max(), uE.min(), uE.max()])
 
@@ -68,6 +73,17 @@ for k in range(N):
     plt.xlabel('vE pixels')
     plt.ylabel('uE pixels')
 
+=======
+    # set the limits of the plot to the limits of the data
+    plt.axis([vE.min(), vE.max(), uE.min(), uE.max()])
+
+    plt.figure(k)
+    io.imshow(B)
+    plt.title('Trame IE(m)')
+    plt.xlabel('vE pixels')
+    plt.ylabel('uE pixels')
+    plt.show()
+>>>>>>> 358f9d3f5613cfe631527836086c8872b315892e
     
 
 print(time.process_time() - start_time, "seconds")  # fin mesure temps d'éxecusion
