@@ -97,7 +97,7 @@ def calcul_et_affichage_3D():
     ax = fig.add_subplot(111, projection='3d')
 
     # Dessin du nuage (coloré selon Z)
-    nuage = ax.scatter(X_objet, Y_objet, Z_objet, c=Z_objet, cmap='viridis', s=1.5)
+    nuage = ax.scatter(X_objet, Y_objet, Z_objet, color='steelblue', s=1.3)
     
 
     ax.set_xlabel('Axe X (mm)')
