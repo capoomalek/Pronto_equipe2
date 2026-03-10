@@ -1,117 +1,207 @@
+# -*- coding: utf-8 -*-
+"""
+Coord3D_objet.py
+================
+Restitution des coordonnées 3D d'un objet bouclier sphérique
+par imageur 3D à code binaire.
+
+Référence : "Imageur 3D à Code Binaire"
+            SERVAGENT Noël (R9) / révision 2024 Elisabeth Lys (R13)
+
+Pipeline (scripts précédents requis) :
+  Objet.py            → X.txt, Y.txt, Z.txt
+  Trames_binaires.py  → N.txt, uE.txt, vE.txt, Trame1..N.bmp
+  franges_objet.py    → ME.txt, angles.txt, I1..N.bmp
+  franges_recepteur.py→ MR.txt, IRZoom1..N.bmp, uRzoom.txt, vRzoom.txt,
+                         uRzoomvect.txt, vRzoomvect.txt
+  Local_cotes_franges.py → PosiGauche.txt, PosiDroite.txt
+
+Ce script (§6.4.3) :
+  - Charge ME, MR et les matrices de positions de franges
+  - Calcule les coordonnées 3D (X,Y,Z) de l'objet (Eq. 34–35)
+  - Affiche la restitution 3D (Fig. 6-10) et en niveaux de gris (Fig. 6-11)
+"""
+
+import time
+start_time = time.process_time()
+
 import numpy as np
+from numpy import loadtxt, pi, array, zeros, savetxt, linspace
+from scipy.interpolate import griddata
 import matplotlib.pyplot as plt
 
-def calcul_et_affichage_3D():
-    print("1. Chargement des matrices de calibration...")
-    ME = np.loadtxt('ME.txt')
-    MR = np.loadtxt('MR.txt')
-    
-    # --- LA BONNE MÉTHODE (Eq. 36) ---
-    # Normalisation des matrices (on divise par le coefficient m34, situé en [2, 3])
-    MEN = ME / ME[2, 3]
-    MRN = MR / MR[2, 3]
-    
-    print("2. Chargement des axes et des données de franges...")
-    # L'axe appelé "uR_axe" fait 1500 pixels (Horizontal) et "vR_axe" fait 1080 pixels (Vertical)
-    Axe_H = np.loadtxt('urzoomvect.txt') 
-    Axe_V = np.loadtxt('vrzoomvect.txt') 
-    vE_matrice = np.loadtxt('Posiglobal.txt') 
-    
-    print("3. Création de la grille et application des corrections...")
-    Grille_H, Grille_V = np.meshgrid(Axe_H, Axe_V)
-    
-    # On ne garde que les pixels où une frange a été détectée (vE > 0)
-    masque_valide = vE_matrice > 0
-    
-    # --- LES CORRECTIONS GEOMETRIQUES SONT ICI ---
-    OFFSET_CAMERA = 230      # Recentrage du zoom horizontal (1920 - 1500) / 2
-    FACTEUR_PROJECTEUR = 40  # Conversion du numéro de frange en pixel LCD (1280 pixels / 32 franges)
-    
-    # D'après la théorie du PDF : uR est l'axe VERTICAL et vR est l'axe HORIZONTAL
-    uR_valide = Grille_V[masque_valide] 
-    vR_valide = Grille_H[masque_valide] + OFFSET_CAMERA
-    vE_valide = vE_matrice[masque_valide] * FACTEUR_PROJECTEUR
-    
-    N_points = len(uR_valide)
-    print(f"-> {N_points} points utiles isolés pour le calcul.")
-    print("4. Résolution du système d'équations (Eq. 36)...")
+# =============================================================================
+# Chargement des fichiers générés par les scripts précédents
+# =============================================================================
 
-    # Initialisation de GN et HN
-    GN = np.zeros((N_points, 3, 3))
-    HN = np.zeros((N_points, 3))
-    
-    # Remplissage de la matrice GN (Eq. 36)
-    GN[:, 0, 0] = MRN[2, 0] * uR_valide - MRN[0, 0]
-    GN[:, 0, 1] = MRN[2, 1] * uR_valide - MRN[0, 1]
-    GN[:, 0, 2] = MRN[2, 2] * uR_valide - MRN[0, 2]
-    
-    GN[:, 1, 0] = MRN[2, 0] * vR_valide - MRN[1, 0]
-    GN[:, 1, 1] = MRN[2, 1] * vR_valide - MRN[1, 1]
-    GN[:, 1, 2] = MRN[2, 2] * vR_valide - MRN[1, 2]
-    
-    GN[:, 2, 0] = MEN[2, 0] * vE_valide - MEN[1, 0]
-    GN[:, 2, 1] = MEN[2, 1] * vE_valide - MEN[1, 1]
-    GN[:, 2, 2] = MEN[2, 2] * vE_valide - MEN[1, 2]
+# Matrices de projection perspective (générées par franges_objet.py
+# et franges_recepteur.py)
+ME = loadtxt('ME.txt')   # 3×4  émetteur
+MR = loadtxt('MR.txt')   # 3×4  récepteur
 
-    # Remplissage du vecteur HN (Eq. 36)
-    HN[:, 0] = MRN[0, 3] - uR_valide
-    HN[:, 1] = MRN[1, 3] - vR_valide
-    HN[:, 2] = MEN[1, 3] - vE_valide
+# Nombre de trames / ordre du code binaire
+N = int(loadtxt('N.txt'))
+P = 2**N   # nombre de franges
 
-    # On transforme HN pour autoriser le calcul matriciel par lot avec NumPy
-    HN = HN[..., np.newaxis]
+# Taille LCD (émetteur)
+NbHE = int(loadtxt('NbHE.txt'))   # nombre de colonnes LCD
 
-    # Résolution GN * P = HN
+# Matrices de positions des côtés de franges
+# (générées par Local_cotes_franges.py)
+# Chaque matrice a la taille du récepteur zoomé (NbHRzoom × NbVRzoom)
+PosiGauche = loadtxt('PosiGauche.txt')   # côté gauche : valeur = C (impair)
+PosiDroite = loadtxt('PosiDroite.txt')   # côté droit  : valeur = C+1
+
+# Coordonnées pixels du récepteur zoomé
+uRzoom = loadtxt('uRzoom.txt')   # coordonnées lignes  (uR)
+vRzoom = loadtxt('vRzoom.txt')   # coordonnées colonnes (vR)
+
+print(f"N = {N}  →  P = {P} franges")
+print(f"NbHE = {NbHE}")
+print(f"Taille image récepteur zoom : {PosiGauche.shape}")
+
+# =============================================================================
+# §5.3  RECONSTRUCTION 3D  (Eq. 34 et 35)
+#
+# Eq. 34 : vEg = (NbHE / 2^N) * C + 1      (bord gauche de la frange C)
+#           vEd = (NbHE / 2^N) * (C + 1)   (bord droit  de la frange C)
+#
+# Eq. 35 : résolution de  G · [X, Y, Z]^T = H
+#
+#   G = | m31R*uR - m11R   m32R*uR - m12R   m33R*uR - m13R |
+#       | m31R*vR - m21R   m32R*vR - m22R   m33R*vR - m23R |
+#       | m31E*vE - m21E   m32E*vE - m22E   m33E*vE - m23E |
+#
+#   H = | m14R - m34R*uR |
+#       | m24R - m34R*vR |
+#       | m24E - m34E*vE |
+# =============================================================================
+
+def reconstruct_point(uR, vR, vE):
+    """
+    Restitue les coordonnées 3D (X, Y, Z) d'un point de l'objet
+    à partir de ses coordonnées récepteur (uR, vR) et de l'abscisse
+    émetteur vE associée (bord gauche ou droit de la frange).
+
+    Paramètres
+    ----------
+    uR : float  — ligne   du point sur la CCD (pixels)
+    vR : float  — colonne du point sur la CCD (pixels)
+    vE : float  — colonne du bord de frange sur le LCD (pixels)
+
+    Retourne
+    --------
+    xyz : ndarray (3,)  — coordonnées [X, Y, Z] en mm,
+          ou [nan, nan, nan] si le système est singulier.
+    """
+    G = np.array([
+        [MR[2,0]*uR - MR[0,0],  MR[2,1]*uR - MR[0,1],  MR[2,2]*uR - MR[0,2]],
+        [MR[2,0]*vR - MR[1,0],  MR[2,1]*vR - MR[1,1],  MR[2,2]*vR - MR[1,2]],
+        [ME[2,0]*vE - ME[1,0],  ME[2,1]*vE - ME[1,1],  ME[2,2]*vE - ME[1,2]]
+    ], dtype=float)
+
+    H = np.array([
+        MR[0,3] - MR[2,3]*uR,
+        MR[1,3] - MR[2,3]*vR,
+        ME[1,3] - ME[2,3]*vE
+    ], dtype=float)
+
     try:
-        P = np.linalg.solve(GN, HN)
+        return np.linalg.solve(G, H)
     except np.linalg.LinAlgError:
-        print("Erreur : Impossible de résoudre le système (Matrice singulière).")
-        return
+        return np.full(3, np.nan)
 
-    print("5. Reconstitution de l'image 3D et sauvegarde...")
-    X_complet = np.full(vE_matrice.shape, np.nan)
-    Y_complet = np.full(vE_matrice.shape, np.nan)
-    Z_complet = np.full(vE_matrice.shape, np.nan)
 
-    # Extraction des coordonnées pour la sauvegarde
-    X_complet[masque_valide] = P[:, 0, 0]
-    Y_complet[masque_valide] = P[:, 1, 0]
-    Z_complet[masque_valide] = P[:, 2, 0]
+# =============================================================================
+# Parcours de toutes les franges impaires C ∈ {1, 3, 5, …, 2^N - 1}
+# Pour chaque frange C, les côtés gauche et droit sont repérés respectivement
+# dans PosiGauche (valeur == C) et PosiDroite (valeur == C+1).
+# =============================================================================
 
-    np.savetxt('X_obj.txt', X_complet, fmt='%.6f', delimiter='\t')
-    np.savetxt('Y_obj.txt', Y_complet, fmt='%.6f', delimiter='\t')
-    np.savetxt('Z_obj.txt', Z_complet, fmt='%.6f', delimiter='\t')
-    
-    print("Succès ! Fichiers générés. Lancement de la vue 3D...")
+X_mes = []
+Y_mes = []
+Z_mes = []
 
-    # ==========================================
-    # 6. AFFICHAGE 3D INTERACTIF
-    # ==========================================
-    
-    # On récupère directement les listes de points calculés pour l'affichage
-    X_objet = P[:, 0, 0]
-    Y_objet = P[:, 1, 0]
-    Z_objet = P[:, 2, 0]
+NbHRzoom, NbVRzoom = PosiGauche.shape
 
-    fig = plt.figure(figsize=(12, 9))
-    ax = fig.add_subplot(111, projection='3d')
+for C in range(1, P, 2):   # franges impaires uniquement (§6.4.2)
 
-    # Dessin du nuage (coloré selon Z)
-    nuage = ax.scatter(X_objet, Y_objet, Z_objet, color='steelblue', s=1.3)
-    
+    # Eq. 34 : abscisses LCD des bords de la frange C
+    vEg = (NbHE / P) * C + 1        # bord gauche → vE = vEg
+    vEd = (NbHE / P) * (C + 1)      # bord droit  → vE = vEd
 
-    ax.set_xlabel('Axe X (mm)')
-    ax.set_ylabel('Axe Y (mm)')
-    ax.set_zlabel('Axe Z (mm)')
-    ax.set_title("Reconstruction 3D de l'objet")
+    # ---- Côté gauche (PosiGauche == C) ----
+    rows_g, cols_g = np.where(PosiGauche == C)
+    for i in range(len(rows_g)):
+        uR = float(uRzoom[rows_g[i], cols_g[i]])
+        vR = float(vRzoom[rows_g[i], cols_g[i]])
+        xyz = reconstruct_point(uR, vR, vEg)
+        if not np.any(np.isnan(xyz)):
+            X_mes.append(xyz[0])
+            Y_mes.append(xyz[1])
+            Z_mes.append(xyz[2])
 
-    # ASTUCE 1 : Forcer les vraies proportions physiques (évite l'effet plat)
-    ax.set_box_aspect((np.ptp(X_objet), np.ptp(Y_objet), np.ptp(Z_objet)))
+    # ---- Côté droit (PosiDroite == C+1) ----
+    rows_d, cols_d = np.where(PosiDroite == C + 1)
+    for i in range(len(rows_d)):
+        uR = float(uRzoom[rows_d[i], cols_d[i]])
+        vR = float(vRzoom[rows_d[i], cols_d[i]])
+        xyz = reconstruct_point(uR, vR, vEd)
+        if not np.any(np.isnan(xyz)):
+            X_mes.append(xyz[0])
+            Y_mes.append(xyz[1])
+            Z_mes.append(xyz[2])
 
-    # ASTUCE 2 : Orienter la caméra initiale pour bien voir le relief
-    ax.view_init(elev=35, azim=-45)
+X_mes = np.array(X_mes)
+Y_mes = np.array(Y_mes)
+Z_mes = np.array(Z_mes)
 
-    plt.show()
+print(f"Points restitués : {len(X_mes)}")
 
-if __name__ == '__main__':
-    calcul_et_affichage_3D()
+# Sauvegarde des coordonnées restituées
+savetxt('X_mes.txt', X_mes, fmt='%-7.6f')
+savetxt('Y_mes.txt', Y_mes, fmt='%-7.6f')
+savetxt('Z_mes.txt', Z_mes, fmt='%-7.6f')
+
+# =============================================================================
+# §6.4.3  AFFICHAGE
+#
+# Figure 6-10 : représentation 3D points par points
+# Figure 6-11 : représentation en niveaux de gris
+# =============================================================================
+
+fig = plt.figure(figsize=(14, 6))
+
+# ── Figure 6-10 : vue 3D points par points ───────────────────────────────────
+ax1 = fig.add_subplot(121, projection='3d')
+if len(X_mes) > 0:
+    sc = ax1.scatter(X_mes, Y_mes, Z_mes,
+                     c=Z_mes, cmap='viridis', s=1, alpha=0.6)
+    fig.colorbar(sc, ax=ax1, shrink=0.5, pad=0.1, label='Zmes (mm)')
+ax1.set_xlabel('Xmes (mm)')
+ax1.set_ylabel('Ymes (mm)')
+ax1.set_zlabel('Zmes (mm)')
+ax1.set_title(f'Objet 3D restitué dans repère objet (N={N})\n'
+              f'Représentation 3D points par points')
+
+# ── Figure 6-11 : niveaux de gris (interpolation sur grille régulière) ───────
+ax2 = fig.add_subplot(122)
+if len(X_mes) > 0:
+    xi = linspace(X_mes.min(), X_mes.max(), 600)
+    yi = linspace(Y_mes.min(), Y_mes.max(), 600)
+    Zi = griddata((X_mes, Y_mes), Z_mes,
+                  (xi[None, :], yi[:, None]), method='linear')
+    im = ax2.imshow(Zi,
+                    extent=[xi.min(), xi.max(), yi.min(), yi.max()],
+                    origin='lower', cmap='gray', aspect='auto')
+    fig.colorbar(im, ax=ax2, label='Zmes (mm)')
+ax2.set_xlabel('Xmes (mm)')
+ax2.set_ylabel('Ymes (mm)')
+ax2.set_title(f'Image3D - objet Zmes (mm)\n'
+              f'Représentation en niveaux de gris (N={N})')
+
+plt.tight_layout()
+plt.savefig('Coord3D_Objet_result.png', dpi=150)
+plt.show()
+
+print(time.process_time() - start_time, "seconds")
