@@ -1,26 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Coord3D_objet.py
-================
-Restitution des coordonnées 3D d'un objet bouclier sphérique
-par imageur 3D à code binaire.
-
-Référence : "Imageur 3D à Code Binaire"
-            SERVAGENT Noël (R9) / révision 2024 Elisabeth Lys (R13)
-
-Pipeline (scripts précédents requis) :
-  Objet.py            → X.txt, Y.txt, Z.txt
-  Trames_binaires.py  → N.txt, uE.txt, vE.txt, Trame1..N.bmp
-  franges_objet.py    → ME.txt, angles.txt, I1..N.bmp
-  franges_recepteur.py→ MR.txt, IRZoom1..N.bmp, uRzoom.txt, vRzoom.txt,
-                         uRzoomvect.txt, vRzoomvect.txt
-  Local_cotes_franges.py → PosiGauche.txt, PosiDroite.txt
-
-Ce script (§6.4.3) :
-  - Charge ME, MR et les matrices de positions de franges
-  - Calcule les coordonnées 3D (X,Y,Z) de l'objet (Eq. 34–35)
-  - Affiche la restitution 3D (Fig. 6-10) et en niveaux de gris (Fig. 6-11)
-"""
 
 import time
 start_time = time.process_time()
