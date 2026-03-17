@@ -51,6 +51,8 @@ for k in range(N):
     #enregistrement
     A = 'Trame' + str(k+1) + '.jpg'
     io.imsave(A,B)    
+    A = 'Trame' + str(k+1) + '.bmp'
+    io.imsave(A,B) 
 
     #Décommenter pour afficher les figures Trames (pcolor augmente le temps d'execution du prgm)
     z_min, z_max = 0, abs(IE).max()
