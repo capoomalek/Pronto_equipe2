@@ -8,8 +8,7 @@ __pycache__/
 *.bmp
 *.txt
 *.png
-output/
-data/
+*.jpg
 
 # --- Typst ---
 # On garde le code source (.typ) mais on ignore le PDF généré
