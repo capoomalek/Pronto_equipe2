@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Calibration du récepteur (Caméra) - Ajusté selon le cahier des charges.
+Calibration du récepteur (Caméra) - Ajusté avec les données du PDF (Page 34).
 Intègre la matrice normalisée, le facteur d'échelle t3Rmes, et l'optimisation des angles (fmin).
 """
 
@@ -39,7 +39,6 @@ def calibration_faugeras_toscani(coords_3d, coords_2d):
 
 def extraction_parametres(M):
     """Extrait les paramètres de la matrice mise à l'échelle."""
-    # Le facteur d'échelle est directement géré par la norme de la 3eme ligne
     rho = 1.0 / np.linalg.norm(M[2, 0:3])
 
     u0 = (rho**2) * np.dot(M[0, 0:3], M[2, 0:3])
@@ -64,7 +63,7 @@ def matrice_rotation_theorique(angles):
     phi, theta, psi = angles
     phi_r, theta_r, psi_r = np.radians(phi), np.radians(theta), np.radians(psi)
     
-    # Matrices de rotation élémentaires (Convention classique)
+    # Matrices de rotation élémentaires
     Rx = np.array([[1, 0, 0], [0, np.cos(phi_r), -np.sin(phi_r)], [0, np.sin(phi_r), np.cos(phi_r)]])
     Ry = np.array([[np.cos(theta_r), 0, np.sin(theta_r)], [0, 1, 0], [-np.sin(theta_r), 0, np.cos(theta_r)]])
     Rz = np.array([[np.cos(psi_r), -np.sin(psi_r), 0], [np.sin(psi_r), np.cos(psi_r), 0], [0, 0, 1]])
@@ -72,7 +71,7 @@ def matrice_rotation_theorique(angles):
     return Rz @ Ry @ Rx
 
 def fonction_cout_angles(angles, R_cible):
-    """Évalue l'écart (norme de Frobenius) entre la rotation calculée et la rotation visée (Eq. 47)."""
+    """Évalue l'écart entre la rotation calculée et la rotation visée (Eq. 47)."""
     R_calc = matrice_rotation_theorique(angles)
     return np.linalg.norm(R_calc - R_cible)
 
@@ -80,30 +79,32 @@ if __name__ == "__main__":
     start_time = time.process_time()
     
     # ---------------------------------------------------------------------
-    # 1. DONNÉES DE CALIBRATION
+    # 1. DONNÉES DE CALIBRATION (Issues des tableaux Page 34)
     # ---------------------------------------------------------------------
     
-    # Tableau des 18 points 2D (issus de l'image 'Figure 7-2')
+    # Tableau des 18 points 2D (uRi, vRi en pixels)
     pts_2d = np.array([
-        [594.9, 133.0],
-    [936.8, 318.0],
-    [1187.8, 380.8],
-    [718.8, 461.7],
-    [1032.6, 511.3],
-    [580.0, 673.1],
-    [943.4, 787.1],
-    [1201.0, 696.2],
-        [689.0, 78.5],
-    [1042.5, 285.0],
-    [1298.5, 351.1],
-    [822.8, 441.9],
-    [1144.9, 494.7],
-    [685.7, 653.3],
-    [1062.3, 788.7],
-    [1323.3, 697.9],
+        [165, 209],   # MR1
+        [539, 209],   # MR2
+        [913, 209],   # MR3
+        [120, 959],   # MR4
+        [539, 959],   # MR5
+        [967, 959],   # MR6
+        [257, 1517],  # MR7
+        [539, 1517],  # MR8
+        [822, 1517],  # MR9
+        [127, 195],   # MR10
+        [539, 195],   # MR11
+        [951, 195],   # MR12
+        [85, 1010],   # MR13
+        [539, 1010],  # MR14
+        [1005, 1010], # MR15
+        [236, 1603],  # MR16
+        [539, 1603],  # MR17
+        [843, 1603]   # MR18
     ], dtype=float)
 
-    # Tableau des 18 points 3D (issus de l'image 'Figure 7-1')
+    # Tableau des 18 points 3D (Xi, Yi, Zi en mm)
     pts_3d = np.array([
         [-497.5,  234,   0], [-497.5,    0,   0], [-497.5, -234,   0],
         [     0,  311,   0], [     0,    0,   0], [     0, -311,   0],
@@ -125,35 +126,33 @@ if __name__ == "__main__":
     print("-" * 60)
 
     # ---------------------------------------------------------------------
-    # 3. MISE À L'ÉCHELLE (Eq. 46) ET EXTRACTION DES PARAMÈTRES
+    # 3. MISE À L'ÉCHELLE ET EXTRACTION DES PARAMÈTRES
     # ---------------------------------------------------------------------
-    # D'après ton document, la valeur mesurée est :
     t3Rmes_doc = 1210.656 
     
-    # Eq 46 : MRmes = t3Rmes * MRNmes
-    MRmes = t3Rmes_doc * MRNmes 
-    
+    # Extraction des paramètres à partir de MRNmes normalisée
     u0Rmes, v0Rmes, alphauRmes, alphavRmes, RRmes, t1Rmes, t2Rmes, t3Rmes = extraction_parametres(MRNmes)
+    
+    # Remplacement de t3Rmes par la valeur imposée pour la cohérence de l'affichage
+    t3Rmes = t3Rmes_doc
 
     print("\n" + "-" * 60)
-    print(f"   u0Rmes =  {u0Rmes}")
-    print(f"   v0Rmes =  {v0Rmes}")
+    print(f"   u0Rmes     =  {u0Rmes}")
+    print(f"   v0Rmes     =  {v0Rmes}")
     print(f"   alphauRmes =  {alphauRmes}")
     print(f"   alphavRmes =  {alphavRmes}")
-    print("   RRmes =")
+    print("   RRmes      =")
     print(RRmes)
-    print(f"   t1Rmes =  {t1Rmes}")
-    print(f"   t2Rmes =  {t2Rmes}")
-    print(f"   t3Rmes =  {t3Rmes_doc}  (Valeur imposée/mesurée)")
+    print(f"   t1Rmes     =  {t1Rmes}")
+    print(f"   t2Rmes     =  {t2Rmes}")
+    print(f"   t3Rmes     =  {t3Rmes}  (Valeur imposée/mesurée)")
     print("-" * 60)
 
     # ---------------------------------------------------------------------
     # 4. RÉSOLUTION NUMÉRIQUE DES ANGLES D'EULER (Eq. 47)
     # ---------------------------------------------------------------------
-    # Valeurs d'initialisation (proches des valeurs théoriques de simulation)
     angles_initiaux = [-90, -160, 0]
     
-    # Optimisation fmin de Python
     angles_optimises = fmin(fonction_cout_angles, angles_initiaux, args=(RRmes,), disp=False)
     phiRmes, thetaRmes, psiRmes = angles_optimises
 
@@ -162,3 +161,6 @@ if __name__ == "__main__":
     print(f"   thetaRmes =  {thetaRmes} °")
     print(f"   psiRmes   =  {psiRmes} °")
     print("-" * 60)
+    
+    # Sauvegarde de la matrice normalisée pour l'émetteur
+    np.savetxt('MR_calib.txt', MRNmes, fmt='%-7.9f')

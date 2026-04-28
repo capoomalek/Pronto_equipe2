@@ -3,8 +3,8 @@ from skimage import io
 import numpy as np
 
 # --- CONFIGURATION ---
-nom_image = 'photo_damier.bmp'
-Z_plan = 0  # Mettre 0 ou 100 selon la photo
+nom_image = 'Image_1.bmp'
+Z_plan = 100  # Mettre 0 ou 100 selon la photo
 
 labels_points = ['M1 (haut-gauche)', 'M2 (milieu-gauche)', 'M3 (bas-gauche)',
                  'M4 (haut-centre)',  'M5 (centre)',        'M6 (bas-centre)',

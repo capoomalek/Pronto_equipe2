@@ -25,7 +25,7 @@ T3R_MES     = 1210.656             # distance O→récepteur en mm (à mesurer)
 
 
 # ============================================================
-#  FONCTIONS DE CALIBRATION (identiques à Calib_recepteur.py)
+#  FONCTIONS DE CALIBRATION (Sécurisées mathématiquement)
 # ============================================================
 
 def calibration_faugeras_toscani(coords_3d, coords_2d):
@@ -40,6 +40,7 @@ def calibration_faugeras_toscani(coords_3d, coords_2d):
         A[2*i+1, 4:7]  = [X, Y, Z];  A[2*i+1, 7]     = 1
         A[2*i+1, 8:11] = [-v*X, -v*Y, -v*Z];  B[2*i+1, 0] = v
     x, _, _, _ = lstsq(A, B, rcond=None)
+    
     M = np.zeros((3, 4))
     M[0,:] = [x[0,0], x[1,0], x[2,0], x[3,0]]
     M[1,:] = [x[4,0], x[5,0], x[6,0], x[7,0]]
@@ -50,22 +51,29 @@ def extraction_parametres(M):
     rho  = 1.0 / norm(M[2, 0:3])
     u0   = (rho**2) * np.dot(M[0,0:3], M[2,0:3])
     v0   = (rho**2) * np.dot(M[1,0:3], M[2,0:3])
-    au   = -np.sqrt((rho**2)*np.dot(M[0,0:3],M[0,0:3]) - u0**2)
-    av   =  np.sqrt((rho**2)*np.dot(M[1,0:3],M[1,0:3]) - v0**2)
+    
+    # Sécurisation avec np.abs() pour absorber les imprécisions de clic pixel
+    au   = -np.sqrt(np.abs((rho**2)*np.dot(M[0,0:3],M[0,0:3]) - u0**2))
+    av   =  np.sqrt(np.abs((rho**2)*np.dot(M[1,0:3],M[1,0:3]) - v0**2))
+    
     r3   = rho * M[2,0:3]
     r1   = (rho*M[0,0:3] - u0*r3) / au
     r2   = (rho*M[1,0:3] - v0*r3) / av
     R    = np.array([r1, r2, r3])
+    
     t3   = rho * M[2,3]
     t1   = (rho*M[0,3] - u0*t3) / au
     t2   = (rho*M[1,3] - v0*t3) / av
     return u0, v0, au, av, R, t1, t2, t3
 
 def matrice_rotation(angles):
-    phi, theta, psi = np.radians(angles)
-    Rx = np.array([[1,0,0],[0,np.cos(phi),-np.sin(phi)],[0,np.sin(phi),np.cos(phi)]])
-    Ry = np.array([[np.cos(theta),0,np.sin(theta)],[0,1,0],[-np.sin(theta),0,np.cos(theta)]])
-    Rz = np.array([[np.cos(psi),-np.sin(psi),0],[np.sin(psi),np.cos(psi),0],[0,0,1]])
+    phi, theta, psi = angles
+    phi_r, theta_r, psi_r = np.radians(phi), np.radians(theta), np.radians(psi)
+    
+    Rx = np.array([[1,0,0],[0,np.cos(phi_r),-np.sin(phi_r)],[0,np.sin(phi_r),np.cos(phi_r)]])
+    Ry = np.array([[np.cos(theta_r),0,np.sin(theta_r)],[0,1,0],[-np.sin(theta_r),0,np.cos(theta_r)]])
+    Rz = np.array([[np.cos(psi_r),-np.sin(psi_r),0],[np.sin(psi_r),np.cos(psi_r),0],[0,0,1]])
+    
     return Rz @ Ry @ Rx
 
 def cout_angles(angles, R_cible):
@@ -77,11 +85,6 @@ def cout_angles(angles, R_cible):
 # ============================================================
 
 def saisir_coordonnees_3d(nb_points, nb_plans):
-    """
-    Demande à l'utilisateur d'entrer les coordonnées (X, Y, Z)
-    de chaque point de calibration.
-    Format accepté : "X Y Z"  ex: -497.5 234 0
-    """
     print("\n" + "="*60)
     print("  ÉTAPE 1 — Saisie des coordonnées 3D réelles")
     print("="*60)
@@ -119,10 +122,6 @@ def saisir_coordonnees_3d(nb_points, nb_plans):
 # ============================================================
 
 def cliquer_points_photo(nom_image, pts_3d, nb_points, nb_plans):
-    """
-    Ouvre la photo et guide l'utilisateur pour cliquer
-    sur chaque point dans l'ordre de saisie des coords 3D.
-    """
     print("\n" + "="*60)
     print("  ÉTAPE 2 — Relevé des pixels sur la photo")
     print("="*60)
@@ -155,7 +154,7 @@ def cliquer_points_photo(nom_image, pts_3d, nb_points, nb_plans):
     def update_titre():
         idx = len(pts_2d)
         if idx >= n_total:
-            ax.set_title("✅ Tous les points cliqués ! Appuyez sur Entrée.",
+            ax.set_title("✅ Tous les points cliqués ! Appuyez sur Entrée pour valider.",
                          color='lime', fontsize=12, fontweight='bold')
         else:
             plan_idx = idx // nb_points

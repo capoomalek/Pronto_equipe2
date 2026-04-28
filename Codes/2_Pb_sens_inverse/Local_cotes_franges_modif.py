@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+
 """
 Created on Mon Nov 20 08:28:41 2017
 MAJ octobre 2023
@@ -8,30 +8,22 @@ MAJ octobre 2023
 import time
 start_time = time.process_time() # début mesure temps d'éxecusion
 
-# On importe le module matplotlib qui permet de générer des graphiques 2D et 3D
+
 import matplotlib.pyplot as plt
 from skimage import io
 from skimage import filters
 from skimage.morphology import disk
-# On importe le module numpy qui permet de faire du calcul numérique
 import numpy as np
-from numpy import loadtxt, empty, zeros, ones, savetxt
+from numpy import empty, zeros, ones, savetxt
 
 #Chargement nombre d'image
-N = loadtxt('N.txt', np.int32)
-#Chargement abscisses et ordonnées récepteur zoom
-uRzoomvect = loadtxt('uRzoomvect.txt')
-vRzoomvect = loadtxt('vRzoomvect.txt')
+N = 5   
 
-#Chargement abscisses et ordonnées récepteur zoom
-uRzoom = loadtxt('uRzoom.txt')
-vRzoom = loadtxt('vRzoom.txt')
 
-#Taille récepteur zoom
-NbVRzoom = len(uRzoomvect)
-NbHRzoom = len(vRzoomvect)
+NbHRzoom = 1080
+NbVRzoom = 1920
 
-#On créé la matrice IRzoom
+#On créé la matrice IRzoom à la bonne taille 
 IRzoom = zeros((NbHRzoom,NbVRzoom,N))
 Posiglobal = zeros((NbHRzoom,NbVRzoom))
 PosiGauche = zeros((NbHRzoom,NbVRzoom))
@@ -41,19 +33,25 @@ PosiDroite = zeros((NbHRzoom,NbVRzoom))
 threshold = 100
 # chargement de l'image puis binarisation 
 for k in range (N):
-    #------ Chargement des images d'intensité IRZoom de l'objet dans le repere recepteur ---  
     Nom = f'IRZoom{str(k + 1)}.bmp'
+    
     img = io.imread(Nom)
-    idx = img[:,:,0] > threshold
-    img[idx,0] = 255
-    IRz = (img/255)
-    # On enregistre les IRzoom_1 2 3 ... dans IR_zoom
-    #IRz[:,:,0] = filters.median(IRz[:,:,0], disk(5))
-    IRzoom[:,:,k] = IRz[:,:,0]
+
+    if img.ndim == 3:
+        canal = img[:,:,0]
+    else:
+        canal = img
+        
+    idx = canal > threshold
+    img_bin = np.zeros_like(canal)
+    img_bin[idx] = 255
+    IRz = (img_bin/255)
+    
+    IRzoom[:,:,k] = IRz
 
 #Libération mémoire
 Nom = None
-R = None     
+R = None    
 
 # ----------------------Localisation de la frange C 
     
@@ -78,7 +76,7 @@ for C in range (1,2**N+1,2):
     # Matrice de localisation numérique 
     LC = LClogic*1
     
-    # Libération de la mémoire
+
     del LClogic
     # IRzoom[:,:,l] = None
     # Filtrage médian sur les images des franges permet de nettoyer les petites imperfections
@@ -138,5 +136,5 @@ plt.title('Image des cotés des franges')
 plt.xlabel('vRzoom pixels')
 plt.ylabel('uRzomm pixels')
 
-print(time.process_time() - start_time, "seconds")  # fin mesure temps d'éxecusion
+print(time.process_time() - start_time, "seconds")  
 # %%
