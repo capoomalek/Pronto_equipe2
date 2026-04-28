@@ -49,4 +49,4 @@ plt.title('Z (mm) - Objet bouclier simulé')
 plt.axis([X.min(), X.max(), Y.min(), Y.max()])
 plt.colorbar()
 plt.savefig("Objet1.png")
-print(time.process_time() - start_time, "seconds")  # fin mesure temps d'éxecusion
+print(time.process_time() - start_time, "seconds")  # fin mesure temps d'éxecution
